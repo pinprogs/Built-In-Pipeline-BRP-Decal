@@ -2,8 +2,8 @@ Shader "Custom/BRPDecal"
 {
     Properties
     {
-        _BlitTex ("Blit Tex", 2D) = "white" {}                          // 원본 씬 컬러 텍스처
-        _DecalCount ("Decal Count", Int) = 0                            // 현재 적용할 데칼 수
+        _BlitTex ("Blit Tex", 2D) = "white" {}                          
+        _DecalCount ("Decal Count", Int) = 0                            
     }
     SubShader
     {
@@ -20,17 +20,17 @@ Shader "Custom/BRPDecal"
             #include "UnityCG.cginc"
 
             // 텍스처 및 버퍼
-            sampler2D _BlitTex;                     // 원본 화면
-            sampler2D _CameraDepthTexture;          // 뎁스 텍스처
+            sampler2D _BlitTex;                    
+            sampler2D _CameraDepthTexture;        
 
             // 카메라 변환 행렬
             float4x4 _InverseProjectionMatrix;
             float4x4 _InverseViewMatrix;
 
             // 데칼 데이터
-            float4x4 _WorldToLocalArray[100];       // 데칼 로컬 변환 (AABB 계산용)
-            int _DecalCount;                        // 데칼 수
-            float4 _DecalColors[100];               // 데칼 컬러 (RGBA)
+            float4x4 _WorldToLocalArray[100];       
+            int _DecalCount;                        
+            float4 _DecalColors[100];               
 
             // NDC → View → World 변환 함수
             float3 ReconstructWorldPosition(float2 uv)

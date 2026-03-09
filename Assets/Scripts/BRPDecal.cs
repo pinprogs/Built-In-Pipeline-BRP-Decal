@@ -1,68 +1,64 @@
 using UnityEngine;
 
-namespace SingleCMD
+public class BRPDecal : MonoBehaviour
 {
-    public class BRPDecal : MonoBehaviour
+    public Color color = Color.red;
+    public Matrix4x4 worldToLocalMatrix => transform.worldToLocalMatrix;
+
+    private Vector3 lastPosition;
+    private Quaternion lastRotation;
+    private Vector3 lastScale;
+
+    private void OnEnable()
     {
-        public Color color;
-        public Matrix4x4 worldToLocalMatrix => transform.worldToLocalMatrix;
+        BRPDecalManager.Instance.Register(this);
+        CacheTransform();
+    }
 
-        private Vector3 lastPosition;
-        private Quaternion lastRotation;
-        private Vector3 lastScale;
+    private void OnDisable()
+    {
+        BRPDecalManager.Instance.Unregister(this);
+    }
 
-
-        private void OnEnable()
+    void Update()
+    {
+        if (HasTransformChanged())
         {
-            BRPDecalManager.Instance.Register(this);
             CacheTransform();
+            BRPDecalManager.Instance.RequestRebuild();
         }
+    }
 
-        private void OnDisable()
-        {
-            BRPDecalManager.Instance.Unregister(this);
-        }
+    /// <summary>
+    /// 기존 Transform 정보 캐싱
+    /// </summary>
+    void CacheTransform()
+    {
+        lastPosition = transform.position;
+        lastRotation = transform.rotation;
+        lastScale = transform.localScale;
+    }
 
-        void Update()
-        {
-            if (HasTransformChanged())
-            {
-                CacheTransform();
-                BRPDecalManager.Instance.RequestRebuild();
-            }
-        }
-
-        /// <summary>
-        /// 기존 Transform 정보 캐싱
-        /// </summary>
-        void CacheTransform()
-        {
-            lastPosition = transform.position;
-            lastRotation = transform.rotation;
-            lastScale = transform.localScale;
-        }
-
-        /// <summary>
-        /// Transform 정보가 바뀌었는지 체크
-        /// </summary>
-        /// <returns></returns>
-        bool HasTransformChanged()
-        {
-            return transform.position != lastPosition ||
-                   transform.rotation != lastRotation ||
-                   transform.localScale != lastScale;
-        }
+    /// <summary>
+    /// Transform 정보가 바뀌었는지 체크
+    /// </summary>
+    /// <returns></returns>
+    bool HasTransformChanged()
+    {
+        return transform.position != lastPosition ||
+               transform.rotation != lastRotation ||
+               transform.localScale != lastScale;
+    }
 
 
 #if UNITY_EDITOR
-        private BRPDecalGizmos gizmos;
+    private BRPDecalGizmos gizmos;
 
-        private void OnDrawGizmos()
-        {
-            if (gizmos == null)
-                gizmos = new BRPDecalGizmos();
-            gizmos.Draw(transform);
-        }
-#endif
+    private void OnDrawGizmos()
+    {
+        if (gizmos == null)
+            gizmos = new BRPDecalGizmos();
+        gizmos.Draw(transform);
     }
+#endif
 }

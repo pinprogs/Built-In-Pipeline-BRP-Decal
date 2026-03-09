@@ -4,8 +4,7 @@ using UnityEngine;
 public class BRPDecalGizmos
 {
     /// <summary>
-    /// [외부 메서드]
-    /// transform에 따라 큐브형태의 기즈모 표현
+    /// Transform에 따라 큐브형태의 기즈모 표현
     /// </summary>
     public void Draw(Transform transform)
     {
